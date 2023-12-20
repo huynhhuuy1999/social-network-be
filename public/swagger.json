@@ -18,9 +18,26 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/auth": {
+		"/auth/login": {
 			"get": {
 				"operationId": "GetMessage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/auth/register": {
+			"get": {
+				"operationId": "GetMessage2",
 				"responses": {
 					"200": {
 						"description": "Ok",
