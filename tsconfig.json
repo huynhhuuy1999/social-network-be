@@ -7,6 +7,7 @@
       "@/*": ["./src/*"],
       "@/controllers": ["./src/controllers"],
       "@/routes": ["./src/routes"],
+      "@/types": ["src/models"],
       "@root": ["."]
     },
     "outDir": "./dist",

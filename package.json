@@ -36,6 +36,7 @@
     "@root": ".",
     "@/*": "./src/*",
     "@/controllers": "./src/controllers",
-    "@/routes": "./src/routes"
+    "@/routes": "./src/routes",
+    "@/types": "./src/types"
   }
 }
