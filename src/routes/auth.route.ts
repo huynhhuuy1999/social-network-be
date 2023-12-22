@@ -28,7 +28,10 @@ authRouter.get("/auth/login", async (_req, res) => {
 authRouter.get("/auth/:userId", async (req: Request, res) => {
   const controller = new AuthController();
   const userId = req.params.userId;
-  const response = await controller.getUser(userId, req.body.address);
+  const response = await controller.getUser(
+    userId,
+    req.query.address as string
+  );
   return res.send(response);
 });
 // export default router;

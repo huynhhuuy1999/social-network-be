@@ -11,4 +11,5 @@ export interface User {
   userName?: string;
   phone?: string;
   address?: string;
+  id: number;
 }

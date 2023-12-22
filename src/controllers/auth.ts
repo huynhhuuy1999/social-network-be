@@ -1,3 +1,4 @@
+import { AuthService } from "@/services/auth.service";
 import { AuthResponse, RegisterParams, User } from "../models/auth";
 import {
   Get,
@@ -8,7 +9,13 @@ import {
   SuccessResponse,
   Path,
   Query,
+  Response,
 } from "tsoa";
+
+interface ValidateErrorJSON {
+  message: "Validation failed";
+  details: { [name: string]: unknown };
+}
 
 @Route("auth")
 export default class AuthController extends Controller {
@@ -31,16 +38,15 @@ export default class AuthController extends Controller {
     };
   }
 
+  @Response<ValidateErrorJSON>(422, "Validation Failed")
   @SuccessResponse("200", "Get Success")
   @Get("{userId}")
   public async getUser(
     @Path() userId: string,
-    @Query() address?: string
+    @Query() address: string
   ): Promise<User> {
     this.setStatus(200);
-    return {
-      address,
-      userName: userId,
-    };
+    const authInfo = new AuthService().get(Number(userId), address);
+    return authInfo;
   }
 }
