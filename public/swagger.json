@@ -1,253 +1,230 @@
 {
-	"components": {
-		"examples": {},
-		"headers": {},
-		"parameters": {},
-		"requestBodies": {},
-		"responses": {},
-		"schemas": {
-			"AuthResponse": {
-				"properties": {
-					"message": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RegisterParams": {
-				"properties": {
-					"firstName": {
-						"type": "string"
-					},
-					"surname": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"firstName",
-					"surname"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"LoginParams": {
-				"properties": {
-					"email": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"email",
-					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"User": {
-				"properties": {
-					"userName": {
-						"type": "string"
-					},
-					"phone": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"id"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ValidateErrorJSON": {
-				"properties": {
-					"message": {
-						"type": "string",
-						"enum": [
-							"Validation failed"
-						],
-						"nullable": false
-					},
-					"details": {
-						"properties": {},
-						"additionalProperties": {},
-						"type": "object"
-					}
-				},
-				"required": [
-					"message",
-					"details"
-				],
-				"type": "object",
-				"additionalProperties": false
-			}
-		},
-		"securitySchemes": {}
-	},
-	"info": {
-		"title": "social-network-be",
-		"version": "1.0.0",
-		"license": {
-			"name": "ISC"
-		},
-		"contact": {}
-	},
-	"openapi": "3.0.0",
-	"paths": {
-		"/auth/register": {
-			"post": {
-				"operationId": "PostRegister",
-				"responses": {
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Register User",
-				"tags": [
-					"Auth"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RegisterParams"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/login": {
-			"post": {
-				"operationId": "PostLogin",
-				"responses": {
-					"200": {
-						"description": "Login success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Auth"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/LoginParams"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/test": {
-			"get": {
-				"operationId": "GetTestApi",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Auth"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/auth/{userId}": {
-			"get": {
-				"operationId": "GetUser",
-				"responses": {
-					"200": {
-						"description": "Get Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/User"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Failed",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Auth"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "The user's identifier",
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"in": "query",
-						"name": "address",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/"
-		}
-	]
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "AuthResponse": {
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RegisterParams": {
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          }
+        },
+        "required": ["firstName", "surname"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LoginParams": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "User": {
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["id"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ValidateErrorJSON": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": ["Validation failed"],
+            "nullable": false
+          },
+          "details": {
+            "properties": {},
+            "additionalProperties": {},
+            "type": "object"
+          }
+        },
+        "required": ["message", "details"],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "social network",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "contact": {}
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "PostRegister",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Register User",
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterParams"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "PostLogin",
+        "responses": {
+          "200": {
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginParams"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/test": {
+      "get": {
+        "operationId": "GetTestApi",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/auth/{userId}": {
+      "get": {
+        "operationId": "GetUser",
+        "responses": {
+          "200": {
+            "description": "Get Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateErrorJSON"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The user's identifier",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
 }
