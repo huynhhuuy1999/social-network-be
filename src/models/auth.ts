@@ -1,4 +1,4 @@
-export interface AuthResponse {
+export interface ResponseDefault {
   message: string;
   status: number;
 }

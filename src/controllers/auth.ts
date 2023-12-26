@@ -1,6 +1,6 @@
 import { AuthService } from "@/services/auth.service";
 import {
-  AuthResponse,
+  ResponseDefault,
   LoginParams,
   RegisterParams,
   User,
@@ -17,9 +17,9 @@ import {
   Response,
   Tags,
 } from "tsoa";
-import { ERROR } from "@/enum/errors";
+import { STATUS } from "@/enum/common";
 
-interface ValidateErrorJSON {
+interface ValidateSTATUSJSON {
   message: "Validation failed";
   details: { [name: string]: unknown };
 }
@@ -34,21 +34,21 @@ export default class AuthController extends Controller {
   @Post("/register")
   public async postRegister(
     @Body() requestBody: RegisterParams
-  ): Promise<AuthResponse> {
+  ): Promise<ResponseDefault> {
     const email = requestBody.email.toLowerCase();
     // check account exist
     if (email === "huynhhuuy@gmail.com") {
-      this.setStatus(ERROR.CONFLICT);
+      this.setStatus(STATUS.CONFLICT);
       return {
         message: "email exists",
-        status: ERROR.CONFLICT,
+        status: STATUS.CONFLICT,
       };
     }
 
-    this.setStatus(201);
+    this.setStatus(STATUS.CREATED);
     return {
       message: "Register success",
-      status: ERROR.SUCCESS,
+      status: STATUS.SUCCESS,
       ...requestBody,
     };
   }
@@ -57,34 +57,34 @@ export default class AuthController extends Controller {
   @Post("/login")
   public async postLogin(
     @Body() requestBody: LoginParams
-  ): Promise<AuthResponse> {
-    this.setStatus(201);
+  ): Promise<ResponseDefault> {
+    this.setStatus(STATUS.CREATED);
     return {
       message: "Login success",
-      status: ERROR.SUCCESS,
+      status: STATUS.SUCCESS,
       ...requestBody,
     };
   }
 
   @Get("/test")
-  public async getTestApi(): Promise<AuthResponse> {
+  public async getTestApi(): Promise<ResponseDefault> {
     return {
       message: "test",
-      status: ERROR.SUCCESS,
+      status: STATUS.SUCCESS,
     };
   }
 
   /**
    * @param userId The user's identifier
    */
-  @Response<ValidateErrorJSON>(422, "Validation Failed")
+  @Response<ValidateSTATUSJSON>(422, "Validation Failed")
   @SuccessResponse("200", "Get Success")
   @Get("{userId}")
   public async getUser(
     @Path() userId: string,
     @Query() address: string
   ): Promise<User> {
-    this.setStatus(ERROR.SUCCESS);
+    this.setStatus(STATUS.SUCCESS);
     const authInfo = new AuthService().get(Number(userId), address);
     return authInfo;
   }
