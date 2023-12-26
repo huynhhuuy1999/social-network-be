@@ -1,20 +1,22 @@
 import AuthController from "@/controllers/auth";
+import { ERROR } from "@/enum/errors";
 import { LoginParams, RegisterParams } from "@/models/auth";
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
 
 export const authRouter = express.Router();
 
 authRouter.post(
   "/auth/register",
-  async (_req: Request<RegisterParams>, res) => {
+  async (_req: Request<RegisterParams>, res: Response) => {
     const controller = new AuthController();
-
     const infoRegister: RegisterParams = {
-      firstName: _req.body.firstName,
-      surname: _req.body.surname,
+      email: _req.body.email,
+      password: _req.body.password,
     };
 
     const response = await controller.postRegister(infoRegister);
+
+    res.status(response.status || ERROR.SUCCESS);
     return res.send(response);
   }
 );

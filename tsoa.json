@@ -9,7 +9,8 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@/models": "./src/models/"
+      "@/models": "./src/models/",
+      "@/enum": "./src/enum/"
     },
     "types": "./src/models"
   }

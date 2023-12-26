@@ -17,6 +17,7 @@ import {
   Response,
   Tags,
 } from "tsoa";
+import { ERROR } from "@/enum/errors";
 
 interface ValidateErrorJSON {
   message: "Validation failed";
@@ -34,9 +35,20 @@ export default class AuthController extends Controller {
   public async postRegister(
     @Body() requestBody: RegisterParams
   ): Promise<AuthResponse> {
+    const email = requestBody.email.toLowerCase();
+    // check account exist
+    if (email === "huynhhuuy@gmail.com") {
+      this.setStatus(ERROR.CONFLICT);
+      return {
+        message: "email exists",
+        status: ERROR.CONFLICT,
+      };
+    }
+
     this.setStatus(201);
     return {
       message: "Register success",
+      status: ERROR.SUCCESS,
       ...requestBody,
     };
   }
@@ -49,6 +61,7 @@ export default class AuthController extends Controller {
     this.setStatus(201);
     return {
       message: "Login success",
+      status: ERROR.SUCCESS,
       ...requestBody,
     };
   }
@@ -57,6 +70,7 @@ export default class AuthController extends Controller {
   public async getTestApi(): Promise<AuthResponse> {
     return {
       message: "test",
+      status: ERROR.SUCCESS,
     };
   }
 
@@ -70,7 +84,7 @@ export default class AuthController extends Controller {
     @Path() userId: string,
     @Query() address: string
   ): Promise<User> {
-    this.setStatus(200);
+    this.setStatus(ERROR.SUCCESS);
     const authInfo = new AuthService().get(Number(userId), address);
     return authInfo;
   }

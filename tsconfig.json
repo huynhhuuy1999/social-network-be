@@ -8,7 +8,7 @@
       "@/controllers": ["./src/controllers"],
       "@/routes": ["./src/routes"],
       "@/models": ["./src/models"],
-      "@/docs": ["src/docs"],
+      "@/enum": ["./src/enum"],
       "@root": ["."]
     },
     "outDir": "./dist",

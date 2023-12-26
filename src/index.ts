@@ -9,12 +9,19 @@ import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes";
 import { ValidateError } from "tsoa";
+import bodyParser from "body-parser";
 
 const app = express();
 
 const port = process.env.PORT || 3002;
 
 app.use(express.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+app.use(bodyParser.json());
 // Combined , Common , Short , Dev , Tiny
 app.use(morgan("tiny"));
 app.use(express.static("public"));

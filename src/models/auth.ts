@@ -1,10 +1,11 @@
 export interface AuthResponse {
   message: string;
+  status: number;
 }
 
 export interface RegisterParams {
-  firstName: string;
-  surname: string;
+  email: string;
+  password: string;
 }
 
 export interface User {
