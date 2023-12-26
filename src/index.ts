@@ -26,14 +26,9 @@ app.use(
     swaggerOptions: {
       url: "/swagger.json",
     },
+    explorer: true,
   })
 );
-
-// app.use(function notFoundHandler(_req, res: ExResponse) {
-//   res.status(404).send({
-//     message: "Not Found",
-//   });
-// });
 
 app.use(function errorHandler(
   err: unknown,

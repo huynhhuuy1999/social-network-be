@@ -20,13 +20,33 @@
 			},
 			"RegisterParams": {
 				"properties": {
-					"userName": {
+					"firstName": {
 						"type": "string"
 					},
-					"address": {
+					"surname": {
 						"type": "string"
 					}
 				},
+				"required": [
+					"firstName",
+					"surname"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginParams": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -102,6 +122,10 @@
 						}
 					}
 				},
+				"description": "Register User",
+				"tags": [
+					"Auth"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -117,8 +141,40 @@
 			}
 		},
 		"/auth/login": {
+			"post": {
+				"operationId": "PostLogin",
+				"responses": {
+					"200": {
+						"description": "Login success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginParams"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/test": {
 			"get": {
-				"operationId": "GetMessage2",
+				"operationId": "GetTestApi",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -131,6 +187,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Auth"
+				],
 				"security": [],
 				"parameters": []
 			}
@@ -160,9 +219,13 @@
 						}
 					}
 				},
+				"tags": [
+					"Auth"
+				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "The user's identifier",
 						"in": "path",
 						"name": "userId",
 						"required": true,

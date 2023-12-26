@@ -1,5 +1,5 @@
 import AuthController from "@/controllers/auth";
-import { RegisterParams } from "@/models/auth";
+import { LoginParams, RegisterParams } from "@/models/auth";
 import express, { Request } from "express";
 
 export const authRouter = express.Router();
@@ -10,8 +10,8 @@ authRouter.post(
     const controller = new AuthController();
 
     const infoRegister: RegisterParams = {
-      address: _req.body.address,
-      userName: _req.body.userName,
+      firstName: _req.body.firstName,
+      surname: _req.body.surname,
     };
 
     const response = await controller.postRegister(infoRegister);
@@ -19,9 +19,21 @@ authRouter.post(
   }
 );
 
-authRouter.get("/auth/login", async (_req, res) => {
+authRouter.post("/auth/login", async (_req: Request<LoginParams>, res) => {
   const controller = new AuthController();
-  const response = await controller.getMessage2();
+
+  const infoLogin: LoginParams = {
+    email: _req.body.email,
+    password: _req.body.password,
+  };
+
+  const response = await controller.postLogin(infoLogin);
+  return res.send(response);
+});
+
+authRouter.get("/auth/test", async (_req, res) => {
+  const controller = new AuthController();
+  const response = await controller.getTestApi();
   return res.send(response);
 });
 
@@ -34,4 +46,3 @@ authRouter.get("/auth/:userId", async (req: Request, res) => {
   );
   return res.send(response);
 });
-// export default router;

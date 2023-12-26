@@ -38,6 +38,7 @@
     "@/controllers": "./src/controllers",
     "@/routes": "./src/routes",
     "@/types": "./src/types",
-    "@/services": "./src/services"
+    "@/services": "./src/services",
+    "@/docs": "./src/docs"
   }
 }

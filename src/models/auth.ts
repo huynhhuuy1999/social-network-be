@@ -3,8 +3,8 @@ export interface AuthResponse {
 }
 
 export interface RegisterParams {
-  userName?: string;
-  address?: string;
+  firstName: string;
+  surname: string;
 }
 
 export interface User {
@@ -12,4 +12,9 @@ export interface User {
   phone?: string;
   address?: string;
   id: number;
+}
+
+export interface LoginParams {
+  email: string;
+  password: string;
 }

@@ -1,5 +1,10 @@
 import { AuthService } from "@/services/auth.service";
-import { AuthResponse, RegisterParams, User } from "../models/auth";
+import {
+  AuthResponse,
+  LoginParams,
+  RegisterParams,
+  User,
+} from "../models/auth";
 import {
   Get,
   Route,
@@ -10,6 +15,7 @@ import {
   Path,
   Query,
   Response,
+  Tags,
 } from "tsoa";
 
 interface ValidateErrorJSON {
@@ -18,7 +24,11 @@ interface ValidateErrorJSON {
 }
 
 @Route("auth")
+@Tags("Auth")
 export default class AuthController extends Controller {
+  /**
+   * Register User
+   */
   @SuccessResponse("201", "Created") // Custom success response
   @Post("/register")
   public async postRegister(
@@ -31,13 +41,28 @@ export default class AuthController extends Controller {
     };
   }
 
-  @Get("/login")
-  public async getMessage2(): Promise<AuthResponse> {
+  @SuccessResponse("200", "Login success")
+  @Post("/login")
+  public async postLogin(
+    @Body() requestBody: LoginParams
+  ): Promise<AuthResponse> {
+    this.setStatus(201);
     return {
-      message: "login",
+      message: "Login success",
+      ...requestBody,
     };
   }
 
+  @Get("/test")
+  public async getTestApi(): Promise<AuthResponse> {
+    return {
+      message: "test",
+    };
+  }
+
+  /**
+   * @param userId The user's identifier
+   */
   @Response<ValidateErrorJSON>(422, "Validation Failed")
   @SuccessResponse("200", "Get Success")
   @Get("{userId}")
