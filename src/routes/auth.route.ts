@@ -27,6 +27,15 @@ authRouter.post("/auth/login", async (_req: Request, res: Response) => {
     password: body.password,
   };
   const response = await controller.postLogin(infoLogin);
+  res.status(response.status || STATUS.SUCCESS);
+  return res.send(response);
+});
+
+authRouter.post("/auth/refreshToken", async (_req: Request, res: Response) => {
+  const controller = new AuthController();
+  const body: { refreshToken: string } = _req.body;
+  const response = await controller.postRefreshToken(body);
+  res.status(response.status || STATUS.SUCCESS);
   return res.send(response);
 });
 

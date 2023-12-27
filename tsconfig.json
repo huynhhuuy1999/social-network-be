@@ -9,6 +9,8 @@
       "@/routes": ["./src/routes"],
       "@/models": ["./src/models"],
       "@/enum": ["./src/enum"],
+      "@/utils": ["./src/utils"],
+      "@/constants": ["./src/constants"],
       "@root": ["."]
     },
     "outDir": "./dist",

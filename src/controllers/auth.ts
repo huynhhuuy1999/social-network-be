@@ -4,6 +4,7 @@ import {
   LoginParams,
   RegisterParams,
   User,
+  ResponseLogin,
 } from "../models/auth";
 import {
   Get,
@@ -18,6 +19,9 @@ import {
   Tags,
 } from "tsoa";
 import { STATUS } from "@/enum/common";
+import { generateToken } from "@/utils";
+import { generate } from "rand-token";
+import { jwtDefault } from "@/constants";
 
 interface ValidateSTATUSJSON {
   message: "Validation failed";
@@ -38,7 +42,6 @@ export default class AuthController extends Controller {
     const email = requestBody.email.toLowerCase();
     // check account exist
     if (email === "huynhhuuy@gmail.com") {
-      this.setStatus(STATUS.CONFLICT);
       return {
         message: "email exists",
         status: STATUS.CONFLICT,
@@ -57,12 +60,54 @@ export default class AuthController extends Controller {
   @Post("/login")
   public async postLogin(
     @Body() requestBody: LoginParams
-  ): Promise<ResponseDefault> {
+  ): Promise<ResponseLogin> {
+    // check users
+    if (requestBody.email !== "xxx" || requestBody.password !== "123456") {
+      return {
+        message: "Login failed",
+        status: STATUS.UNAUTHORIZED,
+      };
+    }
+    const accessTokenLife =
+      process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
+    const accessTokenSecret =
+      process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
+    const dataForAccessToken = {
+      email: requestBody.email,
+    };
+
+    const accessToken = await generateToken(
+      dataForAccessToken,
+      accessTokenSecret,
+      accessTokenLife
+    );
+
+    if (!accessToken) {
+      return {
+        message: "Login failed",
+        status: STATUS.UNAUTHORIZED,
+      };
+    }
+
+    let refreshToken = generate(jwtDefault.refreshTokenSize);
+
     this.setStatus(STATUS.CREATED);
     return {
       message: "Login success",
       status: STATUS.SUCCESS,
-      ...requestBody,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  @SuccessResponse("200", "Refresh success")
+  @Post("/refreshToken")
+  public async postRefreshToken(
+    @Body() requestBody: { refreshToken: string }
+  ): Promise<ResponseLogin> {
+    return {
+      message: "Refresh success",
+      status: STATUS.SUCCESS,
     };
   }
 

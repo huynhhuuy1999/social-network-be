@@ -3,6 +3,11 @@ export interface ResponseDefault {
   status: number;
 }
 
+export interface ResponseLogin extends ResponseDefault {
+  refreshToken?: string;
+  accessToken?: string;
+}
+
 export interface RegisterParams {
   email: string;
   password: string;

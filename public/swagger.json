@@ -6,7 +6,7 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"AuthResponse": {
+			"ResponseDefault": {
 				"properties": {
 					"message": {
 						"type": "string"
@@ -35,6 +35,29 @@
 				"required": [
 					"email",
 					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseLogin": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"status": {
+						"type": "number",
+						"format": "double"
+					},
+					"refreshToken": {
+						"type": "string"
+					},
+					"accessToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message",
+					"status"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -77,7 +100,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ValidateErrorJSON": {
+			"ValidateSTATUSJSON": {
 				"properties": {
 					"message": {
 						"type": "string",
@@ -121,7 +144,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
+									"$ref": "#/components/schemas/ResponseDefault"
 								}
 							}
 						}
@@ -154,7 +177,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
+									"$ref": "#/components/schemas/ResponseLogin"
 								}
 							}
 						}
@@ -177,6 +200,46 @@
 				}
 			}
 		},
+		"/auth/refreshToken": {
+			"post": {
+				"operationId": "PostRefreshToken",
+				"responses": {
+					"200": {
+						"description": "Refresh success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseLogin"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"refreshToken": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"refreshToken"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/auth/test": {
 			"get": {
 				"operationId": "GetTestApi",
@@ -186,7 +249,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/AuthResponse"
+									"$ref": "#/components/schemas/ResponseDefault"
 								}
 							}
 						}
@@ -218,7 +281,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
+									"$ref": "#/components/schemas/ValidateSTATUSJSON"
 								}
 							}
 						}
