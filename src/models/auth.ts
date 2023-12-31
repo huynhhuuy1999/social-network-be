@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export interface ResponseDefault {
   message: string;
   status: number;
@@ -23,4 +25,8 @@ export interface User {
 export interface LoginParams {
   email: string;
   password: string;
+}
+
+export interface RequestUser extends Request {
+  email: string;
 }

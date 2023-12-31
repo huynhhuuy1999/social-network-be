@@ -26,3 +26,23 @@ export const generateToken = async (
     return null;
   }
 };
+
+export const decodeToken = async (token: any, secretKey: any) => {
+  try {
+    return await verify(token, secretKey, {
+      ignoreExpiration: true,
+    });
+  } catch (error) {
+    console.log(`Error in decode access token: ${error}`);
+    return null;
+  }
+};
+
+export const verifyToken = async (token: any, secretKey: any) => {
+  try {
+    return await verify(token, secretKey);
+  } catch (error) {
+    console.log(`Error in verify access token:  + ${error}`);
+    return null;
+  }
+};

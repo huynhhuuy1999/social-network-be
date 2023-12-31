@@ -46,6 +46,7 @@
     "@/services": "./src/services",
     "@/enum": "./src/enum",
     "@/utils": "./src/utils",
-    "@/constants": "./src/constants"
+    "@/constants": "./src/constants",
+    "@/middleware": "./src/middleware"
   }
 }

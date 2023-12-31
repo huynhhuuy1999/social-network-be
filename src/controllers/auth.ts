@@ -17,6 +17,7 @@ import {
   Query,
   Response,
   Tags,
+  Security,
 } from "tsoa";
 import { STATUS } from "@/enum/common";
 import { generateToken } from "@/utils";
@@ -102,16 +103,42 @@ export default class AuthController extends Controller {
 
   @SuccessResponse("200", "Refresh success")
   @Post("/refreshToken")
+  @Security("jwt")
   public async postRefreshToken(
-    @Body() requestBody: { refreshToken: string }
+    @Body()
+    requestBody: {
+      refreshToken?: string;
+    }
   ): Promise<ResponseLogin> {
+    const accessTokenSecret =
+      process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
+    const accessTokenLife =
+      process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
+    // Tạo access token mới
+    const dataForAccessToken = {
+      email: "xxx",
+    };
+
+    const accessToken = await generateToken(
+      dataForAccessToken,
+      accessTokenSecret,
+      accessTokenLife
+    );
+    if (!accessToken) {
+      return {
+        message: "Tạo access token không thành công, vui lòng thử lại.",
+        status: STATUS.BAD_REQUEST,
+      };
+    }
     return {
       message: "Refresh success",
       status: STATUS.SUCCESS,
+      accessToken,
     };
   }
 
   @Get("/test")
+  @Security("jwt")
   public async getTestApi(): Promise<ResponseDefault> {
     return {
       message: "test",
