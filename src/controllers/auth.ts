@@ -1,44 +1,19 @@
-import { AuthService } from "@/services/auth.service";
-import {
-  ResponseDefault,
-  LoginParams,
-  RegisterParams,
-  User,
-  ResponseLogin,
-} from "../models/auth";
-import {
-  Get,
-  Route,
-  Post,
-  Body,
-  Controller,
-  SuccessResponse,
-  Path,
-  Query,
-  Response,
-  Tags,
-  Security,
-} from "tsoa";
+import { jwtDefault } from "@/constants";
 import { STATUS } from "@/enum/common";
+import { AuthService } from "@/services/auth.service";
 import { generateToken } from "@/utils";
 import { generate } from "rand-token";
-import { jwtDefault } from "@/constants";
+import {
+  LoginParams,
+  RegisterParams,
+  ResponseDefault,
+  ResponseLogin,
+  User,
+} from "@/models/auth";
 
-interface ValidateSTATUSJSON {
-  message: "Validation failed";
-  details: { [name: string]: unknown };
-}
-
-@Route("auth")
-@Tags("Auth")
-export default class AuthController extends Controller {
-  /**
-   * Register User
-   */
-  @SuccessResponse("201", "Created") // Custom success response
-  @Post("/register")
+export default class AuthController {
   public async postRegister(
-    @Body() requestBody: RegisterParams
+    requestBody: RegisterParams
   ): Promise<ResponseDefault> {
     const email = requestBody.email.toLowerCase();
     // check account exist
@@ -49,7 +24,7 @@ export default class AuthController extends Controller {
       };
     }
 
-    this.setStatus(STATUS.CREATED);
+    // this.setStatus(STATUS.CREATED);
     return {
       message: "Register success",
       status: STATUS.SUCCESS,
@@ -57,11 +32,7 @@ export default class AuthController extends Controller {
     };
   }
 
-  @SuccessResponse("200", "Login success")
-  @Post("/login")
-  public async postLogin(
-    @Body() requestBody: LoginParams
-  ): Promise<ResponseLogin> {
+  public async postLogin(requestBody: LoginParams): Promise<ResponseLogin> {
     // check users
     if (requestBody.email !== "xxx" || requestBody.password !== "123456") {
       return {
@@ -92,7 +63,7 @@ export default class AuthController extends Controller {
 
     let refreshToken = generate(jwtDefault.refreshTokenSize);
 
-    this.setStatus(STATUS.CREATED);
+    // this.setStatus(STATUS.CREATED);
     return {
       message: "Login success",
       status: STATUS.SUCCESS,
@@ -101,22 +72,17 @@ export default class AuthController extends Controller {
     };
   }
 
-  @SuccessResponse("200", "Refresh success")
-  @Post("/refreshToken")
-  @Security("jwt")
-  public async postRefreshToken(
-    @Body()
-    requestBody: {
-      refreshToken?: string;
-    }
-  ): Promise<ResponseLogin> {
+  public async postRefreshToken(requestBody: {
+    email?: string;
+  }): Promise<ResponseLogin> {
     const accessTokenSecret =
       process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
     const accessTokenLife =
       process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
     // Tạo access token mới
     const dataForAccessToken = {
-      email: "xxx",
+      email: requestBody.email || "",
+      // email: req.email,
     };
 
     const accessToken = await generateToken(
@@ -137,8 +103,6 @@ export default class AuthController extends Controller {
     };
   }
 
-  @Get("/test")
-  @Security("jwt")
   public async getTestApi(): Promise<ResponseDefault> {
     return {
       message: "test",
@@ -146,18 +110,21 @@ export default class AuthController extends Controller {
     };
   }
 
-  /**
-   * @param userId The user's identifier
-   */
-  @Response<ValidateSTATUSJSON>(422, "Validation Failed")
-  @SuccessResponse("200", "Get Success")
-  @Get("{userId}")
-  public async getUser(
-    @Path() userId: string,
-    @Query() address: string
-  ): Promise<User> {
-    this.setStatus(STATUS.SUCCESS);
+  public async getUser(userId: string, address: string): Promise<User> {
     const authInfo = new AuthService().get(Number(userId), address);
     return authInfo;
+  }
+
+  public async testMiddleware(
+    requestBody: {
+      email?: string;
+    },
+    xxx: string
+  ): Promise<ResponseDefault> {
+    console.log("xxx", xxx);
+    return {
+      message: "test",
+      status: STATUS.SUCCESS,
+    };
   }
 }
