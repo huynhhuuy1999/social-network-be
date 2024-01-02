@@ -5,13 +5,6 @@
     "module": "commonjs",
     "paths": {
       "@/*": ["./src/*"],
-      "@/controllers": ["./src/controllers"],
-      "@/routes": ["./src/routes"],
-      "@/models": ["./src/models"],
-      "@/enum": ["./src/enum"],
-      "@/utils": ["./src/utils"],
-      "@/constants": ["./src/constants"],
-      "@/middleware": ["./src/middleware"],
       "@root": ["."]
     },
     "outDir": "./dist",

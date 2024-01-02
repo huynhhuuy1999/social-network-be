@@ -1,8 +1,8 @@
 import { Request } from "express";
 
 export interface ResponseDefault {
-  message: string;
-  status: number;
+  message?: string;
+  status?: number;
 }
 
 export interface ResponseLogin extends ResponseDefault {

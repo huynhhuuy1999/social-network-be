@@ -57,7 +57,7 @@ export const checkRefreshToken = async (
   const email = decoded.payload.email; // Lấy email từ payload
 
   if (email !== "xxx") {
-    return res.status(STATUS.UNAUTHORIZED).send("Email khong ton tai");
+    return res.status(STATUS.UNAUTHORIZED).send("Email không tồn tại");
   }
 
   // check refresh token with token in schema user
