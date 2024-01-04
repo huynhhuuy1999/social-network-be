@@ -3,3 +3,4 @@ export const jwtDefault = {
   accessTokenLife: "10m",
   refreshTokenSize: 100,
 };
+export const SALT_ROUNDS = 10;

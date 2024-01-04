@@ -1,4 +1,4 @@
-import { jwtDefault } from "@/constants";
+import { SALT_ROUNDS, jwtDefault } from "@/constants";
 import { STATUS } from "@/enum/common";
 import {
   LoginParams,
@@ -10,8 +10,10 @@ import {
 } from "@/models/auth";
 import { AuthService } from "@/services/auth.service";
 import { generateToken } from "@/utils";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { generate } from "rand-token";
+import bcrypt from "bcrypt";
 
 export const postRegister = async (
   _req: Request,
@@ -23,11 +25,22 @@ export const postRegister = async (
     password: body.password,
   };
   const email = infoRegister.email.toLowerCase();
+  const prisma = new PrismaClient();
   // check account exist
-  if (email === "huynhhuuy@gmail.com") {
+  const getUser = await prisma.user.findFirst({ where: { email } });
+
+  if (getUser?.email === email) {
     return res.status(STATUS.CONFLICT).send("email exists");
   }
+  const password = bcrypt.hashSync(body.password, SALT_ROUNDS);
 
+  await prisma.user.create({
+    data: {
+      email: email,
+      password,
+    },
+  });
+  await prisma.$disconnect();
   return res
     .status(STATUS.SUCCESS)
     .send({ message: "Register success", ...infoRegister });

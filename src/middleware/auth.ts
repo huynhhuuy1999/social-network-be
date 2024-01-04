@@ -9,9 +9,14 @@ export const isAuth = async (req: any, res: Response, next: NextFunction) => {
   if (!accessTokenFromHeader) {
     return res.status(STATUS.UNAUTHORIZED).send("Không tìm thấy access token!");
   }
-
+  if (
+    (accessTokenFromHeader.split(" ").length > 1 &&
+      accessTokenFromHeader.split(" ")[0] !== "Bearer") ||
+    accessTokenFromHeader.split(" ").length === 1
+  )
+    return res.status(STATUS.UNAUTHORIZED).send("Token không hợp lệ");
   const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-  const newHeader = req.headers["authorization"].split(" ")[1];
+  const newHeader = accessTokenFromHeader.split(" ")[1];
 
   const verified = await verifyToken(newHeader, accessTokenSecret);
   if (!verified) {
@@ -34,8 +39,8 @@ export const checkRefreshToken = async (
 ) => {
   const body: { refreshToken: string } = req.body;
   const header = req.headers;
-
-  if (!header["authorization"]) {
+  const accessTokenFromHeader = req.headers["authorization"];
+  if (!accessTokenFromHeader) {
     return res.status(STATUS.UNAUTHORIZED).send("Refresh failed");
   }
 
@@ -45,10 +50,17 @@ export const checkRefreshToken = async (
       .send("Không tìm thấy refresh token.");
   }
 
+  if (
+    (accessTokenFromHeader.split(" ").length > 1 &&
+      accessTokenFromHeader.split(" ")[0] !== "Bearer") ||
+    accessTokenFromHeader.split(" ").length === 1
+  )
+    return res.status(STATUS.UNAUTHORIZED).send("Token không hợp lệ");
+
   const accessTokenSecret =
     process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
-  console.log('header["authorization"]', header["authorization"]);
-  const newHeader = header["authorization"].split(" ")[1];
+
+  const newHeader = accessTokenFromHeader.split(" ")[1];
 
   const decoded = await decodeToken(newHeader, accessTokenSecret);
   if (!decoded) {
@@ -71,7 +83,6 @@ export const middlewareTest = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("middleware test");
   req.xxx = "123455";
   return next();
 };
