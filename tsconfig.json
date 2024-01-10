@@ -2,11 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es6",
-    "module": "commonjs",
+    "module": "NodeNext",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "dist",
+    "outDir": "./dist/src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -15,7 +15,7 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "rootDir": "./"
+    "moduleResolution": "nodenext"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
