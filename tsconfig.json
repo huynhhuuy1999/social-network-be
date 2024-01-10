@@ -4,10 +4,9 @@
     "target": "es6",
     "module": "commonjs",
     "paths": {
-      "@/*": ["./src/*"],
-      "@root": ["."]
+      "@/*": ["./src/*"]
     },
-    "outDir": "./dist",
+    "outDir": "dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -15,7 +14,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "rootDir": "./"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
