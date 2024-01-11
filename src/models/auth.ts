@@ -13,6 +13,10 @@ export interface ResponseLogin extends ResponseDefault {
 export interface RegisterParams {
   email: string;
   password: string;
+  firstName: string;
+  surname: string;
+  birthDate: string;
+  gender: number;
 }
 
 export interface User {

@@ -20,11 +20,16 @@ export const postRegister = async (
   res: Response
 ): Promise<ResponseDefault | any> => {
   const body: RegisterParams = _req.body;
+  const { birthDate, email, firstName, gender, password, surname } = body;
   const infoRegister: RegisterParams = {
-    email: body.email,
-    password: body.password,
+    email,
+    password,
+    birthDate,
+    firstName,
+    gender,
+    surname,
   };
-  const email = infoRegister.email.toLowerCase();
+
   const prisma = new PrismaClient();
   // check account exist
   const getUser = await prisma.user.findFirst({ where: { email } });
@@ -32,18 +37,30 @@ export const postRegister = async (
   if (getUser?.email === email) {
     return res.status(STATUS.CONFLICT).send("email exists");
   }
-  const password = bcrypt.hashSync(body.password, SALT_ROUNDS);
+  const passwordHash = bcrypt.hashSync(body.password, SALT_ROUNDS);
+
+  await prisma.account.create({
+    data: {
+      email,
+      password: passwordHash,
+    },
+  });
 
   await prisma.user.create({
     data: {
-      email: email,
-      password,
+      email,
+      password: passwordHash,
+      birthDate,
+      firstName,
+      gender,
+      surname,
     },
   });
+
   await prisma.$disconnect();
   return res
     .status(STATUS.SUCCESS)
-    .send({ message: "Register success", ...infoRegister });
+    .send({ message: "Register success", ...infoRegister, password: null });
 };
 
 export const postLogin = async (

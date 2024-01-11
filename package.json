@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/src/index.js",
     "build": "tsc && tsc-alias",
-    "dev": "concurrently \"nodemon index.ts\""
+    "dev": "concurrently \"nodemon index.ts\"",
+    "prisma": "npx prisma generate"
   },
   "author": "",
   "license": "ISC",

@@ -12,6 +12,16 @@ model Post {
 }
 
 model User {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  email     String @unique
+  password  String
+  firstName String
+  surname   String
+  birthDate String
+  gender    Int
+}
+
+model Account {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   email    String @unique
   password String

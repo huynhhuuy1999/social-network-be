@@ -4,3 +4,8 @@ export const jwtDefault = {
   refreshTokenSize: 100,
 };
 export const SALT_ROUNDS = 10;
+export const GENDER = {
+  MALE: 1,
+  FAMALE: 2,
+  CUSTOM: 3,
+};
