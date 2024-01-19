@@ -69,21 +69,35 @@ export const postLogin = async (
 ): Promise<ResponseLogin | any> => {
   // check users
 
-  const body: RegisterParams = req.body;
-  const infoLogin: LoginParams = {
-    email: body.email,
-    password: body.password,
-  };
+  const body: LoginParams = req.body;
+  const { email: emailBody, password: passwordBody } = body;
 
-  if (infoLogin.email !== "xxx" || infoLogin.password !== "123456") {
+  const prisma = new PrismaClient();
+  const getUser = await prisma.user.findFirst({ where: { email: emailBody } });
+
+  if (!getUser) {
     return res.status(STATUS.UNAUTHORIZED).send("Login failed");
   }
+  const { birthDate, firstName, gender, surname, id, password, email } =
+    getUser;
+
+  const isPasswordValid = bcrypt.compareSync(passwordBody, password);
+  if (!isPasswordValid) {
+    return res.status(STATUS.UNAUTHORIZED).send("Mật khẩu không chính xác.");
+  }
+
   const accessTokenLife =
     process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
   const accessTokenSecret =
     process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
+
   const dataForAccessToken = {
-    email: infoLogin.email,
+    email,
+    birthDate,
+    gender,
+    firstName,
+    surname,
+    id,
   };
 
   const accessToken = await generateToken(
