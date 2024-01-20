@@ -39,12 +39,12 @@ export const postRegister = async (
   }
   const passwordHash = bcrypt.hashSync(body.password, SALT_ROUNDS);
 
-  await prisma.account.create({
-    data: {
-      email,
-      password: passwordHash,
-    },
-  });
+  // await prisma.account.create({
+  //   data: {
+  //     email,
+  //     password: passwordHash,
+  //   },
+  // });
 
   await prisma.user.create({
     data: {
@@ -54,6 +54,7 @@ export const postRegister = async (
       firstName,
       gender,
       surname,
+      refreshToken: "",
     },
   });
 
@@ -115,6 +116,20 @@ export const postLogin = async (
 
   let refreshToken = generate(jwtDefault.refreshTokenSize);
 
+  if (!getUser.refreshToken) {
+    // Nếu user này chưa có refresh token thì lưu refresh token đó vào database
+    const updateUser = await prisma.user.update({
+      where: { email },
+      data: {
+        refreshToken,
+      },
+    });
+  } else {
+    // Nếu user này đã có refresh token thì lấy refresh token đó từ database
+    refreshToken = getUser.refreshToken;
+  }
+
+  await prisma.$disconnect();
   return res.status(STATUS.SUCCESS).send({
     message: "Login success",
     accessToken,
