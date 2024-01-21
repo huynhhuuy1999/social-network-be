@@ -8,6 +8,7 @@ export interface ResponseDefault {
 export interface ResponseLogin extends ResponseDefault {
   refreshToken?: string;
   accessToken?: string;
+  browserId: string;
 }
 
 export interface RegisterParams {
@@ -29,6 +30,7 @@ export interface User {
 export interface LoginParams {
   email: string;
   password: string;
+  browserId?: string;
 }
 
 export interface RequestUser extends Request {

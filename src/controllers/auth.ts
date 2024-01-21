@@ -39,13 +39,6 @@ export const postRegister = async (
   }
   const passwordHash = bcrypt.hashSync(body.password, SALT_ROUNDS);
 
-  // await prisma.account.create({
-  //   data: {
-  //     email,
-  //     password: passwordHash,
-  //   },
-  // });
-
   await prisma.user.create({
     data: {
       email,
@@ -55,6 +48,7 @@ export const postRegister = async (
       gender,
       surname,
       refreshToken: "",
+      avatar: "",
     },
   });
 
@@ -69,29 +63,23 @@ export const postLogin = async (
   res: Response
 ): Promise<ResponseLogin | any> => {
   // check users
-
   const body: LoginParams = req.body;
-  const { email: emailBody, password: passwordBody } = body;
-
+  const { email: emailBody, password: passwordBody, browserId } = body;
   const prisma = new PrismaClient();
   const getUser = await prisma.user.findFirst({ where: { email: emailBody } });
-
   if (!getUser) {
     return res.status(STATUS.UNAUTHORIZED).send("Login failed");
   }
-  const { birthDate, firstName, gender, surname, id, password, email } =
+  const { birthDate, firstName, gender, surname, id, password, email, avatar } =
     getUser;
-
-  const isPasswordValid = bcrypt.compareSync(passwordBody, password);
+  const isPasswordValid = bcrypt.compareSync(passwordBody, password || "");
   if (!isPasswordValid) {
     return res.status(STATUS.UNAUTHORIZED).send("Mật khẩu không chính xác.");
   }
-
   const accessTokenLife =
     process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
   const accessTokenSecret =
     process.env.ACCESS_TOKEN_SECRET || jwtDefault.accessTokenSecret;
-
   const dataForAccessToken = {
     email,
     birthDate,
@@ -100,22 +88,18 @@ export const postLogin = async (
     surname,
     id,
   };
-
   const accessToken = await generateToken(
     dataForAccessToken,
     accessTokenSecret,
     accessTokenLife
   );
-
   if (!accessToken) {
     return {
       message: "Login failed",
       status: STATUS.UNAUTHORIZED,
     };
   }
-
   let refreshToken = generate(jwtDefault.refreshTokenSize);
-
   if (!getUser.refreshToken) {
     // Nếu user này chưa có refresh token thì lưu refresh token đó vào database
     const updateUser = await prisma.user.update({
@@ -134,6 +118,7 @@ export const postLogin = async (
     message: "Login success",
     accessToken,
     refreshToken,
+    browserId,
   });
 };
 
