@@ -4,7 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
-import { authRouter } from "./routes";
+import { authRouter, userRouter } from "./routes";
 
 const app = express();
 
@@ -28,3 +28,4 @@ app.listen(port, () => {
 });
 
 app.use(authRouter);
+app.use(userRouter);

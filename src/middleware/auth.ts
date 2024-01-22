@@ -1,6 +1,7 @@
 import { jwtDefault } from "@/constants";
 import { STATUS } from "@/enum/common";
 import { decodeToken, verifyToken } from "@/utils";
+import { PrismaClient } from "@prisma/client";
 import { NextFunction, Response } from "express";
 
 export const isAuth = async (req: any, res: Response, next: NextFunction) => {
@@ -24,11 +25,16 @@ export const isAuth = async (req: any, res: Response, next: NextFunction) => {
       .status(STATUS.UNAUTHORIZED)
       .send("Bạn không có quyền truy cập vào tính năng này!");
   }
-
-  if (verified.payload.email === "xxx")
-    // const user = await userModle.getUser(verified.payload.username);
-    req.email = "xxx";
-
+  const prisma = new PrismaClient();
+  if (verified.payload.email) {
+    const user = await prisma.user.findFirst({
+      where: { email: verified.payload.email },
+    });
+    await prisma.$disconnect();
+    if (user) {
+      req.user = { ...user, password: null, refreshToken: null };
+    }
+  }
   return next();
 };
 

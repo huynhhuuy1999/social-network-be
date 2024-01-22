@@ -34,5 +34,5 @@ export interface LoginParams {
 }
 
 export interface RequestUser extends Request {
-  email: string;
+  user: User;
 }

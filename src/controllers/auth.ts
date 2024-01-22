@@ -8,7 +8,6 @@ import {
   ResponseLogin,
   User,
 } from "@/models/auth";
-import { AuthService } from "@/services/auth.service";
 import { generateToken } from "@/utils";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
@@ -149,16 +148,4 @@ export const postRefreshToken = async (
     message: "Refresh success",
     accessToken,
   });
-};
-
-export const getUser = async (
-  req: RequestUser | any,
-  res: Response
-): Promise<User> => {
-  const userId = req.params.userId;
-  const authInfo = new AuthService().get(
-    Number(userId),
-    req.query.address as string
-  );
-  return authInfo;
 };
