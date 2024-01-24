@@ -1,16 +1,5 @@
 import { Request } from "express";
 
-export interface ResponseDefault {
-  message?: string;
-  status?: number;
-}
-
-export interface ResponseLogin extends ResponseDefault {
-  refreshToken?: string;
-  accessToken?: string;
-  browserId: string;
-}
-
 export interface RegisterParams {
   email: string;
   password: string;
@@ -20,11 +9,22 @@ export interface RegisterParams {
   gender: number;
 }
 
+export interface RegisterResponse {
+  accessToken?: string;
+  refreshToken?: string;
+  infoUser?: RegisterParams;
+}
+
 export interface User {
-  userName?: string;
-  phone?: string;
-  address?: string;
-  id: number;
+  avatar?: string | null;
+  birthDate?: string;
+  email?: string;
+  firstName?: string;
+  gender?: number;
+  id?: string;
+  password?: string;
+  refreshToken?: string;
+  surname?: string;
 }
 
 export interface LoginParams {
@@ -35,4 +35,5 @@ export interface LoginParams {
 
 export interface RequestUser extends Request {
   user: User;
+  email?: string;
 }
