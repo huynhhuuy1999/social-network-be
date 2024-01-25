@@ -136,9 +136,7 @@ export const postRefreshToken = async (
   const accessTokenLife =
     process.env.ACCESS_TOKEN_LIFE || jwtDefault.accessTokenLife;
   // Tạo access token mới
-  const dataForAccessToken = {
-    email: req.email || "",
-  };
+  const dataForAccessToken = req.user;
 
   const accessToken = await generateToken(
     dataForAccessToken,
